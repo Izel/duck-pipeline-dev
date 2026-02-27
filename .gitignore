@@ -1,1 +1,9 @@
 .venv/
+terraform/envs/*/.terraform
+*.tfvars
+*.tfvars.*
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.log
+__pycache__/
