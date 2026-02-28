@@ -1,5 +1,6 @@
 .venv/
 terraform/envs/*/.terraform
+terraform/envs/*/ducks-out
 *.tfvars
 *.tfvars.*
 *.tfstate

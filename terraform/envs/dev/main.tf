@@ -29,4 +29,20 @@ module "networking" {
   depends_on = [module.api]
 }
 
+module "database" {
+  source           = "../../modules/database"
+  project_id       = var.project_id
+  region           = var.region
+  env_name         = var.env_name
+  network_id       = module.networking.network_id
+  db_instance_tier = var.db_instance_tier
+  db_password      = var.db_password
+  depends_on       = [module.networking]
+}
 
+module "container" {
+  source     = "../../modules/container"
+  region     = var.region
+  env_name   = var.env_name
+  depends_on = [module.networking]
+}

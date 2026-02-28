@@ -33,5 +33,10 @@ variable "db_instance_tier" {
 variable "db_name" {
   description = "The name of the initial database"
   type        = string
-  default     = "ducks_db"
+}
+
+variable "db_password" {
+  description = "The password for the initial database user"
+  type        = string
+  sensitive   = true
 }
