@@ -1,0 +1,52 @@
+# cloudbuild.yaml
+steps:
+  # Build the Docker image
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Build"
+    args:
+      [
+        "build",
+        "-t",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA",
+        "-t",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:latest",
+        "./src",
+      ]
+
+  # Push the image to Artifact Registry
+  - name: "gcr.io/cloud-builders/docker"
+    id: "Push"
+    args:
+      [
+        "push",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image",
+        "--all-tags",
+      ]
+
+  # Deploy to Cloud Run
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    id: "Deploy"
+    entrypoint: gcloud
+    args:
+      [
+        "run",
+        "deploy",
+        "${_SERVICE_NAME}",
+        "--image",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA",
+        "--region",
+        "${_REGION}",
+        "--platform",
+        "managed",
+        "--quiet",
+      ]
+
+# Make the file reusable across environments
+substitutions:
+  _REGION: "us-central1"
+  _REPO_NAME: "ducks-pipeline-repo-dev"
+  _SERVICE_NAME: "ducks-pipeline-service-dev"
+  _COMMIT_SHA: "latest"
+
+images:
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA"
