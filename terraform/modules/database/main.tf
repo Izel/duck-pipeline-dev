@@ -12,17 +12,14 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = var.network_id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+  deletion_policy         = "ABANDON"
 }
 
-# Postgres Instance
+# Postgres Instance server setup
 resource "google_sql_database_instance" "instance" {
-  name             = "ducks-db-${var.env_name}"
+  name             = var.db_server_instance_name
   region           = var.region
   database_version = "POSTGRES_15"
-
-  # Ensure the connection is ready before creating the DB
-  depends_on = [google_service_networking_connection.private_vpc_connection]
-
   settings {
     tier = var.db_instance_tier
     ip_configuration {
@@ -30,15 +27,19 @@ resource "google_sql_database_instance" "instance" {
       private_network = var.network_id
     }
   }
+  deletion_protection = false
+  depends_on          = [google_service_networking_connection.private_vpc_connection]
 }
 
+# Database setup
 resource "google_sql_database" "database" {
-  name     = "ducks_data"
+  name     = var.db_name
   instance = google_sql_database_instance.instance.name
 }
 
+# Database user setup
 resource "google_sql_user" "users" {
-  name     = "pipeline_user"
+  name     = var.db_user
   instance = google_sql_database_instance.instance.name
-  password = var.db_password #  pass this from Secret Manager later
+  password = var.db_password #  This should be passed via Secret Manager
 }

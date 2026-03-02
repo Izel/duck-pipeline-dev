@@ -3,6 +3,7 @@ resource "google_compute_network" "vpc" {
   auto_create_subnetworks = false
 }
 
+# Red para recursos y servicios (BDs, Cloud Run, etc.) que necesitan acceso privado a la VPC
 resource "google_compute_subnetwork" "subnet" {
   name          = "${var.vpc_name}-subnet"
   ip_cidr_range = "10.0.1.0/24"
@@ -16,3 +17,4 @@ resource "google_vpc_access_connector" "connector" {
   ip_cidr_range = "10.8.0.0/28"
   network       = google_compute_network.vpc.name
 }
+

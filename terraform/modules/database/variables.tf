@@ -28,6 +28,21 @@ variable "db_instance_tier" {
   default     = "db-f1-micro"
 }
 
+variable "db_server_instance_name" {
+  description = "The name of the database instance server"
+  type        = string
+}
+
+variable "db_name" {
+  description = "The name of the database instance"
+  type        = string
+}
+
+variable "db_user" {
+  description = "The user for the database instance"
+  type        = string
+}
+
 variable "db_password" {
   type      = string
   sensitive = true # Temporal while we set up the infrastructure.

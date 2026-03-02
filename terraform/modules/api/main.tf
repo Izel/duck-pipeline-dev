@@ -16,8 +16,9 @@ variable "gcp_service_list" {
     "run.googleapis.com",               # Cloud Run
     "vpcaccess.googleapis.com",         # VPC Connector
     "servicenetworking.googleapis.com", # Required for private services access (Cloud SQL)
-    "secretmanager.googleapis.com",     # For password management
-    "artifactregistry.googleapis.com"   # For container image storage
+    "artifactregistry.googleapis.com",  # For container image storage
+    "iam.googleapis.com",               # Permissions and Service Accounts
+    "cloudbuild.googleapis.com"         # For building container images
   ]
 }
 
