@@ -66,7 +66,7 @@ variable "account_id" {
   type        = string
 }
 
-# Repository configuration variables
+# Repository (Artifact Registry) configuration variables
 variable "repo_name" {
   type        = string
   description = "The name of the artifact registry repository."
@@ -78,5 +78,16 @@ variable "repo_format" {
 variable "repo_description" {
   type        = string
   description = "The description of the artifact registry repository."
+}
+
+
+# Github trigger configuration variables
+variable "github_user" {
+  description = "Github user name"
+  type        = string
+}
+variable "github_repo" {
+  description = "Github repository name"
+  type        = string
 }
 

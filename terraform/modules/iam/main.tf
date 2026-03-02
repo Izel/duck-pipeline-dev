@@ -1,3 +1,5 @@
+data "google_project" "project" {}
+
 # Service Account for the Pipeline
 resource "google_service_account" "pipeline_sa" {
   account_id   = var.account_id
@@ -11,8 +13,6 @@ resource "google_project_iam_member" "sql_client" {
   member  = "serviceAccount:${google_service_account.pipeline_sa.email}"
 }
 
-data "google_project" "project" {}
-
 # Allow Cloud Build to act as the pipeline service account
 resource "google_service_account_iam_member" "cloudbuild_as_sa" {
   service_account_id = google_service_account.pipeline_sa.name
@@ -20,9 +20,17 @@ resource "google_service_account_iam_member" "cloudbuild_as_sa" {
   member             = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
-# Allow Cloud Build to manage Cloud Run
+# Allow Cloud Build service account to act as Cloud Run service account for deployment
 resource "google_project_iam_member" "cloudbuild_run_admin" {
   project = var.project_id
   role    = "roles/run.admin"
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
+
+# Allow Cloud Build service account to act as Cloud Run service account for deployment
+resource "google_project_iam_member" "cloudbuild_artifactregistry_writer" {
+  project = var.project_id
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+}
+
