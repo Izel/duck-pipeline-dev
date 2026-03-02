@@ -1,3 +1,4 @@
+# Variables for Development Environment
 variable "project_id" {
   description = "The GCP Project ID for Development environment"
   type        = string
@@ -19,24 +20,63 @@ variable "env_name" {
   }
 }
 
-variable "vpc_name" {
-  description = "The name of the VPC network"
+# Container and service configuration variables
+variable "pipeline_service_name" {
+  description = "The name of the Ducks Pipeline Service"
+  type        = string
+}
+variable "image_name" {
+  description = "The name of the container image to deploy"
   type        = string
 }
 
+# Database configuration Variables
 variable "db_instance_tier" {
   description = "The machine type for Cloud SQL"
   type        = string
-  default     = "db-f1-micro" # Suitable for development, consider upgrading for production
+  default     = "db-f1-micro" # consider upgrading for production
 }
-
+variable "db_instance_name" {
+  description = "The name of the database server instance"
+  type        = string
+}
 variable "db_name" {
   description = "The name of the initial database"
   type        = string
 }
-
+variable "db_user" {
+  description = "The user for the initial database"
+  type        = string
+}
 variable "db_password" {
   description = "The password for the initial database user"
   type        = string
   sensitive   = true
 }
+
+# VPC configuration variable
+variable "vpc_name" {
+  description = "The name of the VPC network"
+  type        = string
+}
+
+# Service Account for IAM resources
+variable "account_id" {
+  description = "The service account ID for IAM resources"
+  type        = string
+}
+
+# Repository configuration variables
+variable "repo_name" {
+  type        = string
+  description = "The name of the artifact registry repository."
+}
+variable "repo_format" {
+  type        = string
+  description = "The format of the artifact registry repository (e.g., DOCKER, MAVEN, etc.)."
+}
+variable "repo_description" {
+  type        = string
+  description = "The description of the artifact registry repository."
+}
+
