@@ -29,3 +29,10 @@ gcloud auth login
 ### Project provisioning
 
 1. Execute terraform init
+
+## Connect Repository
+
+1. Go to the Cloud Build Triggers page.
+2. Click Manage Repositories -> Connect Repository.
+3. Select GitHub (Cloud Build GitHub App).
+4. Follow the prompts to authorize your account and select your ducks-pipeline repository.
