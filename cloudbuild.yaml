@@ -50,3 +50,7 @@ substitutions:
 
 images:
   - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA"
+
+# Only log to Cloud Logging to avoid excessive logs in Cloud Build
+options:
+  logging: CLOUD_LOGGING_ONLY
