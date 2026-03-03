@@ -26,3 +26,15 @@ resource "google_project_iam_member" "pipeline_sa_roles" {
   role    = each.key
   member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
+
+# Service Account for Cloud Scheduler
+resource "google_service_account" "scheduler_sa" {
+  account_id   = "pipeline-scheduler-sa-${var.env_name}"
+  display_name = "Cloud Scheduler Service Account"
+}
+resource "google_cloud_run_v2_service_iam_member" "scheduler_invoker" {
+  name     = var.pipeline_service_name
+  location = var.region
+  role     = "roles/run.invoker"
+  member   = "serviceAccount:${google_service_account.scheduler_sa.email}"
+}

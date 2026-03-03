@@ -34,11 +34,13 @@ module "database" {
 }
 
 module "iam" {
-  source     = "../../modules/iam"
-  project_id = var.project_id
-  account_id = "${var.account_id}-${var.env_name}"
-  env_name   = var.env_name
-  depends_on = [module.api]
+  source                = "../../modules/iam"
+  project_id            = var.project_id
+  account_id            = "${var.account_id}-${var.env_name}"
+  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
+  region                = var.region
+  env_name              = var.env_name
+  depends_on            = [module.api]
 }
 
 module "repository" {
@@ -75,4 +77,18 @@ module "services" {
   depends_on                  = [module.networking, module.iam, module.repository, module.database]
 }
 
-
+module "job" {
+  source                = "../../modules/job"
+  project_id            = var.project_id
+  region                = var.region
+  env_name              = var.env_name
+  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
+  service_account_email = module.iam.scheduler_sa_email
+  job_name              = "${var.job_name}-${var.env_name}"
+  job_description       = var.job_description
+  job_schedule          = var.job_schedule
+  job_time_zone         = var.job_time_zone
+  job_attempt_deadline  = var.job_attempt_deadline
+  pipeline_service_uri  = module.services.pipeline_service_uri
+  depends_on            = [module.services, module.iam]
+}

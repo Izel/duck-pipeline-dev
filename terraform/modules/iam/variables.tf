@@ -13,3 +13,14 @@ variable "env_name" {
   type        = string
 }
 
+variable "pipeline_service_name" {
+  description = "The name of the pipeline service"
+  type        = string
+}
+
+variable "region" {
+  description = "The region for the pipeline service and related resources"
+  type        = string
+}
+
+
