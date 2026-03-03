@@ -39,7 +39,7 @@ resource "google_cloudbuild_trigger" "github_trigger" {
     _REGION       = var.region
     _REPO_NAME    = var.artifact_repo_name
     _SERVICE_NAME = var.pipeline_service_name
-    _IMAGE_NAME   = var.artifact_repo_name
+    _IMAGE_NAME   = var.artifact_name
     _COMMIT_SHA   = var.artifact_commit_sha
   }
 
