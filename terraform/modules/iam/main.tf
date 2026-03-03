@@ -8,8 +8,12 @@ resource "google_service_account" "pipeline_sa" {
 
 # Grant permission to connect to Cloud SQL
 resource "google_project_iam_member" "sql_client" {
+  for_each = toset([
+    "roles/cloudsql.client",
+    "roles/logging.logWriter"
+  ])
   project = var.project_id
-  role    = "roles/cloudsql.client"
+  role    = each.key
   member  = "serviceAccount:${google_service_account.pipeline_sa.email}"
 }
 

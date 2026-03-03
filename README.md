@@ -36,3 +36,7 @@ gcloud auth login
 2. Click Manage Repositories -> Connect Repository.
 3. Select GitHub (Cloud Build GitHub App).
 4. Follow the prompts to authorize your account and select your ducks-pipeline repository.
+
+## Configure Docker
+
+gcloud auth configure-docker europe-west1-docker.pkg.dev
