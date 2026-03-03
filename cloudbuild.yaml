@@ -1,4 +1,3 @@
-# cloudbuild.yaml
 steps:
   # Build the Docker image
   - name: "gcr.io/cloud-builders/docker"
@@ -7,9 +6,9 @@ steps:
       [
         "build",
         "-t",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA",
         "-t",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:latest",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:latest",
         "./src",
       ]
 
@@ -19,7 +18,7 @@ steps:
     args:
       [
         "push",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}",
         "--all-tags",
       ]
 
@@ -33,7 +32,7 @@ steps:
         "deploy",
         "${_SERVICE_NAME}",
         "--image",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA",
         "--region",
         "${_REGION}",
         "--platform",
@@ -44,12 +43,13 @@ steps:
 # Make the file reusable across environments
 substitutions:
   _REGION: "us-central1"
-  _REPO_NAME: "duck-pipeline-dev"
-  _SERVICE_NAME: "ducks-pipeline-service-dev"
+  _REPO_NAME: "duck-pipeline-artifacts-dev"
+  _SERVICE_NAME: "duck-pipeline-service-dev"
   _COMMIT_SHA: "latest"
+  _IMAGE_NAME: "duck-pipeline-image"
 
 images:
-  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/ducks-image:$_COMMIT_SHA"
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA"
 
 # Only log to Cloud Logging to avoid excessive logs in Cloud Build
 options:

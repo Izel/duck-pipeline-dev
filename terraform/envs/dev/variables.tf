@@ -25,10 +25,6 @@ variable "pipeline_service_name" {
   description = "The name of the Ducks Pipeline Service"
   type        = string
 }
-variable "image_name" {
-  description = "The name of the container image to deploy"
-  type        = string
-}
 
 # Database configuration Variables
 variable "db_instance_tier" {
@@ -67,17 +63,25 @@ variable "account_id" {
 }
 
 # Repository (Artifact Registry) configuration variables
-variable "artifact_name" {
+variable "artifact_repo_name" {
   type        = string
   description = "The name of the artifact at the artifact registry repository."
 }
-variable "artifact_format" {
+variable "artifact_repo_format" {
   type        = string
   description = "The format of the artifact registry repository (e.g., DOCKER, MAVEN, etc.)."
 }
-variable "artifact_description" {
+variable "artifact_repo_description" {
   type        = string
   description = "The description of the artifact registry repository."
+}
+variable "artifact_name" {
+  type        = string
+  description = "The name of the artifact within the artifact registry repository."
+}
+variable "artifact_commit_sha" {
+  type        = string
+  description = "The commit SHA of the artifact within the artifact registry repository."
 }
 
 # Github trigger configuration variables

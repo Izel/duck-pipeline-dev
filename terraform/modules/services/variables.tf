@@ -18,8 +18,8 @@ variable "pipeline_sa_email" {
   type        = string
 }
 
-variable "image_name" {
-  description = "The name of the container image to deploy"
+variable "image_path" {
+  description = "The path of the container within the image to deploy"
   type        = string
 }
 

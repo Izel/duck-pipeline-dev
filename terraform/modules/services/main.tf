@@ -5,8 +5,8 @@ resource "google_cloud_run_v2_service" "pipeline_service" {
   template {
     service_account = var.pipeline_sa_email
     containers {
-      image = "us-docker.pkg.dev/cloudrun/container/hello"
-      #image = var.image_name
+      #image = "us-docker.pkg.dev/cloudrun/container/hello"
+      image = var.image_path
 
       # Environment variables for database connection in container
       env {

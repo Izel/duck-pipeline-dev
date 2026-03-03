@@ -5,9 +5,9 @@
 
 resource "google_artifact_registry_repository" "pipeline_artifact_repo" {
   location      = var.region
-  repository_id = var.artifact_name
-  description   = var.artifact_description
-  format        = var.artifact_format
+  repository_id = var.artifact_repo_name
+  description   = var.artifact_repo_description
+  format        = var.artifact_repo_format
   # Labels for cost tracking
   labels = {
     env = var.env_name
@@ -17,13 +17,13 @@ resource "google_artifact_registry_repository" "pipeline_artifact_repo" {
 resource "google_cloudbuild_trigger" "github_trigger" {
   name        = var.trigger_name
   location    = var.region
-  description = "Trigger for pushing to main branch"
+  description = "Trigger for pushing to master branch"
 
   github {
     owner = var.github_user
     name  = var.github_repo
     push {
-      branch = "main" # Trigger only on pushes to the main branch
+      branch = "master" # Trigger only on pushes to the master branch
     }
   }
 
@@ -32,10 +32,12 @@ resource "google_cloudbuild_trigger" "github_trigger" {
 
   # Pass the variables needed by the YAML
   substitutions = {
+    _PROJECT_ID   = var.project_id
     _REGION       = var.region
     _REPO_NAME    = var.github_repo
     _SERVICE_NAME = var.pipeline_service_name
-    _COMMIT_SHA   = "latest"
+    _IMAGE_NAME   = var.artifact_repo_name
+    _COMMIT_SHA   = var.artifact_commit_sha
   }
 
   # Ensure the service account has permission to run builds
