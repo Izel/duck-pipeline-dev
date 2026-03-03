@@ -1,28 +1,19 @@
 steps:
-  # Build the Docker image
+  # 1. Build the Docker image
+  # Using the full tag here. I've added both :latest and :$COMMIT_SHA
   - name: "gcr.io/cloud-builders/docker"
     id: "Build"
-    args:
-      [
+    args: [
         "build",
         "-t",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_COMMIT_SHA}",
         "-t",
         "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:latest",
-        "./src",
+        ".", # Change this to "./src" ONLY if your Dockerfile is inside the src folder
       ]
 
-  # Push the image to Artifact Registry
-  - name: "gcr.io/cloud-builders/docker"
-    id: "Push"
-    args:
-      [
-        "push",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}",
-        "--all-tags",
-      ]
-
-  # Deploy to Cloud Run
+  # 2. Deploy to Cloud Run
+  # Note: We don't need a "Push" step because the 'images' block below handles it!
   - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     id: "Deploy"
     entrypoint: gcloud
@@ -32,7 +23,7 @@ steps:
         "deploy",
         "${_SERVICE_NAME}",
         "--image",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA",
+        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_COMMIT_SHA}",
         "--region",
         "${_REGION}",
         "--platform",
@@ -40,17 +31,17 @@ steps:
         "--quiet",
       ]
 
-# Make the file reusable across environments
 substitutions:
   _REGION: "us-central1"
   _REPO_NAME: "duck-pipeline-artifacts-dev"
   _SERVICE_NAME: "duck-pipeline-service-dev"
-  _COMMIT_SHA: "latest"
+  _COMMIT_SHA: "latest" # This will be automatically replaced with the actual commit SHA by Cloud Build
   _IMAGE_NAME: "duck-pipeline-image"
 
+# This block tells Cloud Build to push these tags automatically after the steps finish
 images:
-  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:$_COMMIT_SHA"
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_COMMIT_SHA}"
+  - "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:latest"
 
-# Only log to Cloud Logging to avoid excessive logs in Cloud Build
 options:
   logging: CLOUD_LOGGING_ONLY
