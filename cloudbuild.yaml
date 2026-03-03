@@ -44,7 +44,7 @@ steps:
 # Make the file reusable across environments
 substitutions:
   _REGION: "us-central1"
-  _REPO_NAME: "ducks-pipeline-repo-dev"
+  _REPO_NAME: "duck-pipeline-dev"
   _SERVICE_NAME: "ducks-pipeline-service-dev"
   _COMMIT_SHA: "latest"
 

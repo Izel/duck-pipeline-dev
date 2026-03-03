@@ -5,8 +5,8 @@ resource "google_cloud_run_v2_service" "pipeline_service" {
   template {
     service_account = var.pipeline_sa_email
     containers {
-      #image = "us-docker.pkg.dev/cloudrun/container/hello"
-      image = var.image_name
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+      #image = var.image_name
 
       # Environment variables for database connection in container
       env {
@@ -29,7 +29,7 @@ resource "google_cloud_run_v2_service" "pipeline_service" {
     # Link to VPC Connector
     vpc_access {
       connector = var.connector_id
-      egress    = "ALL_TRAFFIC"
+      egress    = "PRIVATE_RANGES_ONLY"
     }
   }
 }

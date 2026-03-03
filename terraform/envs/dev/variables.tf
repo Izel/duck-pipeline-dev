@@ -67,21 +67,24 @@ variable "account_id" {
 }
 
 # Repository (Artifact Registry) configuration variables
-variable "repo_name" {
+variable "artifact_name" {
   type        = string
-  description = "The name of the artifact registry repository."
+  description = "The name of the artifact at the artifact registry repository."
 }
-variable "repo_format" {
+variable "artifact_format" {
   type        = string
   description = "The format of the artifact registry repository (e.g., DOCKER, MAVEN, etc.)."
 }
-variable "repo_description" {
+variable "artifact_description" {
   type        = string
   description = "The description of the artifact registry repository."
 }
 
-
 # Github trigger configuration variables
+variable "trigger_name" {
+  type        = string
+  description = "The name of the Cloud Build trigger."
+}
 variable "github_user" {
   description = "Github user name"
   type        = string

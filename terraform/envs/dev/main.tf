@@ -46,12 +46,13 @@ module "repository" {
   region                = var.region
   env_name              = var.env_name
   project_id            = var.project_id
-  repo_name             = "${var.repo_name}-${var.env_name}"
-  repo_format           = var.repo_format
-  repo_description      = var.repo_description
+  artifact_format       = var.artifact_format
+  artifact_name         = "${var.artifact_name}-${var.env_name}"
+  artifact_description  = var.artifact_description
+  trigger_name          = "${var.trigger_name}-${var.env_name}"
   github_user           = var.github_user
   github_repo           = var.github_repo
-  pipeline_service_name = var.pipeline_service_name
+  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
   cloudbuild_sa_email   = module.iam.cloudbuild_sa_email
   depends_on            = [module.api]
 }

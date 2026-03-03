@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "ducks-pipeline-dev-01-tfstate"
+    bucket = "duck-pipeline-dev-01-tfstate"
     prefix = "terraform/state"
   }
 }
