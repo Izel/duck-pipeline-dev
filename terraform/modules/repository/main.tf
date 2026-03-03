@@ -8,6 +8,7 @@ resource "google_artifact_registry_repository" "pipeline_artifact_repo" {
   repository_id = var.artifact_repo_name
   description   = var.artifact_repo_description
   format        = var.artifact_repo_format
+
   # Labels for cost tracking
   labels = {
     env = var.env_name
@@ -41,6 +42,6 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   }
 
   # Ensure the service account has permission to run builds
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}" #"projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
 }
 

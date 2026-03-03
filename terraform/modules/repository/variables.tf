@@ -10,6 +10,10 @@ variable "env_name" {
   type        = string
   description = "The environment name (e.g., dev, staging, prod) for labeling and naming resources."
 }
+variable "service_account" {
+  type        = string
+  description = "The service account email to use for the artifact registry repository."
+}
 
 # Artifact Registry Repository configuration variables
 variable "artifact_repo_name" {
