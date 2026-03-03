@@ -21,6 +21,7 @@ resource "google_project_iam_member" "pipeline_sa_roles" {
     "roles/artifactregistry.writer",
     "roles/artifactregistry.reader",
     "roles/artifactregistry.repoAdmin",
+    "roles/logging.logWriter"
   ])
   project = var.project_id
   role    = each.key

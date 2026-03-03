@@ -42,6 +42,7 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   }
 
   # Ensure the service account has permission to run builds
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}" #"projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
+  service_account = "projects/${var.project_id}/serviceAccounts/${var.service_account}"
+  #"projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
 }
 

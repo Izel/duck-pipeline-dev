@@ -2,6 +2,7 @@
 variable "project_id" {
   description = "The GCP Project ID for Development environment"
   type        = string
+  default     = "duck-pipeline-2026"
 }
 variable "region" {
   description = "Primary region for project resources provisioning"
