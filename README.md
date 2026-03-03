@@ -26,54 +26,47 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 ### Google Cloud connection
 
 1. Choose the account you want to use for this configuration.
-```bash
-gcloud init```
+```gcloud init```
 2. Pick the cloud project to use
 3. Log in to the cloud by following the link provided after executing the command below
-```bash
-gcloud auth login```
+``` gcloud auth login ```
 4. Select your Google account 
 5. Allow Google Cloud to access your account by clicking *Allow*
 
 ## Configure Docker
-```bash
-gcloud auth configure-docker us-central1-docker.pkg.dev```
+```gcloud auth configure-docker us-central1-docker.pkg.dev```
   
 ## Deployment
 ### Steps
 1. **Initialize Terraform:**
-   ```bash
-   terraform init```
+   ``` terraform init ```
 
 2. **Plan the infrastructure**
-   ```bash
-   terraform plan -out=tfplan```
+   ``` terraform plan -out=tfplan ```
 
 3. **Apply changes**
-   ```bash
-   apply -var="project_id=<YOUR_PROJECT_ID>" ```
+   ``` apply -var="project_id=<YOUR_PROJECT_ID>" ```
 
 ## Local Reproduction
 To test the ETL logic locally without deploying to Cloud Run:
 1. Build the Docker image:
-    ```bash
-    docker build -t ducks-etl .```
+    ``` docker build -t ducks-etl .```
 
 2. Run the container:
-    ```bash
-    docker run -p 8080:8080 ducks-etl```
+    ``` docker run -p 8080:8080 ducks-etl ```
 
 3. Trigger the process:
-    ```bash
-    curl localhost:8080```
+    ``` curl localhost:8080 ```
 
 ## Scheduled Execution
 1. The job is configured to run automatically via Cloud Scheduler.
-```bash
-    Job Name: daily-ducks-etl-job-dev
-    Target URI: https://duck-pipeline-service-dev-248136157540.us-central1.run.app```
+```
+ Job Name: daily-ducks-etl-job-dev
+ Target URI: https://duck-pipeline-service-dev-248136157540.us-central1.run.app
+```
 
 2. Manual Trigger. To manually invoke the production pipeline with authentication:
-```bash
-gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1```
+``` gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1 ```
+
+
 
