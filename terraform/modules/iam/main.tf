@@ -10,7 +10,14 @@ resource "google_service_account" "pipeline_sa" {
 resource "google_project_iam_member" "sql_client" {
   for_each = toset([
     "roles/cloudsql.client",
+    "roles/logging.logWriter",
+    "roles/run.admin",
+    "roles/iam.serviceAccountUser",
+    "roles/artifactregistry.writer",
+    "roles/artifactregistry.reader",
+    "roles/artifactregistry.repoAdmin",
     "roles/logging.logWriter"
+
   ])
   project = var.project_id
   role    = each.key

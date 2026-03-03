@@ -37,7 +37,7 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   substitutions = {
     _PROJECT_ID   = var.project_id
     _REGION       = var.region
-    _REPO_NAME    = var.github_repo
+    _REPO_NAME    = var.artifact_repo_name
     _SERVICE_NAME = var.pipeline_service_name
     _IMAGE_NAME   = var.artifact_repo_name
     _COMMIT_SHA   = var.artifact_commit_sha
