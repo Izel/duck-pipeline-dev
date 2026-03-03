@@ -25,7 +25,7 @@ variable "pipeline_service_uri" {
   description = "The URI of the Ducks Pipeline Service"
   type        = string
 }
-variable "service_account_email" {
+variable "job_sa_email" {
   description = "The email of the service account for Cloud Scheduler to invoke the pipeline"
   type        = string
 }
