@@ -8,12 +8,11 @@ resource "google_cloud_scheduler_job" "daily_etl_run" {
   http_target {
     http_method = "GET"
     # Point this to your Cloud Run URL!
-    uri = var.pipeline_service_uri
-
+    uri = "https://duck-pipeline-service-dev-248136157540.us-central1.run.app"
     oidc_token {
       service_account_email = var.service_account_email
       # The audience must match the target service URL
-      audience = var.pipeline_service_uri
+      audience = "https://duck-pipeline-service-dev-248136157540.us-central1.run.app"
     }
   }
 }
