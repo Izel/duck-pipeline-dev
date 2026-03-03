@@ -4,3 +4,4 @@ pg8000>=1.30.0
 cloud-sql-python-connector[pg8000]
 flask
 gunicorn
+google-cloud-logging

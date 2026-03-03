@@ -1,5 +1,8 @@
 import os
+from xmlrpc import client
 import requests
+import logging
+import google.cloud.logging
 import sqlalchemy
 from flask import Flask
 from google.cloud.sql.connector import Connector, IPTypes
@@ -25,6 +28,14 @@ engine = sqlalchemy.create_engine("postgresql+pg8000://", creator=get_db_connect
 
 @app.route("/")
 def init_and_run():
+    # 1. Initialize the Cloud Logging client
+    client_log = google.cloud.logging.Client()
+
+    # 2. This attaches the Google Cloud handler to the standard Python logger
+    client_log.setup_logging()
+
+    # 3. Use standard logging as usual
+    logging.info("ETL Pipeline started....")
     try:
         with engine.connect() as db_conn:
             # Ensure the table exists (DDL)
@@ -40,7 +51,7 @@ def init_and_run():
                     );"""
                 )
             )
-
+            logging.info("Fetching data from ArcGIS API for California chapters...")
             # Fetch data from the ArcGIS API (EXTRACT)
             api_url = "https://services.arcgis.com/89v7YI99SreL8M8T/arcgis/rest/services/DU_University_Chapters/FeatureServer/0/query"
             params = {
@@ -55,6 +66,7 @@ def init_and_run():
 
             # Transform and Load data into Postgres (LOAD)
             count = 0
+            logging.info("Transforming and Inserting data into Postgres...")
             for feature in data.get("features", []):
                 attr = feature["attributes"]
                 geom = feature["geometry"]
@@ -86,11 +98,13 @@ def init_and_run():
 
             db_conn.commit()
             db_conn.close()
+            logging.info(f"Totally records processed: {count}")
 
         return f"Successfully processed {count} California chapters.", 200
 
     except Exception as e:
         print(f"Pipeline Error: {e}")
+        logging.info(f"The pipeline has experienced an error: {str(e)}")
         return f"Pipeline Failed: {str(e)}", 500
 
 
