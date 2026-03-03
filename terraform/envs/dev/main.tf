@@ -89,6 +89,6 @@ module "job" {
   job_schedule          = var.job_schedule
   job_time_zone         = var.job_time_zone
   job_attempt_deadline  = var.job_attempt_deadline
-  pipeline_service_uri  = module.iam.pipeline_service_uri
+  pipeline_service_uri  = module.services.pipeline_service_uri
   depends_on            = [module.services, module.iam]
 }
