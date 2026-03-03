@@ -53,15 +53,15 @@ def init_and_run():
             )
             logging.info("Fetching data from ArcGIS API for California chapters...")
             # Fetch data from the ArcGIS API (EXTRACT)
-            api_url = "https://services2.arcgis.com/5I7u4SJE1vUr79JC/arcgis/rest/services/UniversityChapters_Public/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json"
-            # params = {
-            #     "where": "State = 'CA'",
-            #     "outFields": "ChapterID,University_Chapter,City,State",
-            #     "f": "json",
-            #     "returnGeometry": "true",
-            # }
+            api_url = "https://services.arcgis.com/89v7YI99SreL8M8T/arcgis/rest/services/DU_University_Chapters/FeatureServer/0/query"
+            params = {
+                "where": "State = 'CA'",
+                "outFields": "ChapterID,University_Chapter,City,State",
+                "f": "json",
+                "returnGeometry": "true",
+            }
 
-            response = requests.get(api_url)  # , params=params)
+            response = requests.get(api_url, params=params)
             data = response.json()
 
             # Transform and Load data into Postgres (LOAD)
