@@ -37,26 +37,48 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 ```gcloud auth configure-docker us-central1-docker.pkg.dev```
   
 ## Deployment
-### Steps
-1. **Initialize Terraform:**
-   ``` terraform init ```
+The deployment process involves the steps below:
 
-2. **Plan the infrastructure**
-   ``` terraform plan -out=tfplan ```
+> [!NOTE]
+> A circular reference will be created between Cloud Run Service and Artefact Registry. The first, require an image that has not been created yet, and the second requires a Service to crete an image. To avoid this circular reference, execute step 0. **Set Up** only the first time or after executing *terraform destroy*
 
-3. **Apply changes**
-   ``` apply -var="project_id=<YOUR_PROJECT_ID>" ```
+0. **Set Up**
+   Uncomment lines below in the *terraform/modules/services/main.tf* file. This will create the service using a basic, ready to use google image.
+```
+image = "us-docker.pkg.dev/cloudrun/container/hello"
+# image = var.image_path
+```
+2. **Initialize Terraform:**
+```
+terraform init
+```
+
+4. **Plan the infrastructure**
+```
+terraform plan -out=tfplan
+```
+
+6. **Apply changes**
+```
+apply -var="project_id=<YOUR_PROJECT_ID>"
+```
 
 ## Local Reproduction
 To test the ETL logic locally without deploying to Cloud Run:
 1. Build the Docker image:
-    ``` docker build -t ducks-etl .```
+```
+docker build -t ducks-etl .
+```
 
-2. Run the container:
-    ``` docker run -p 8080:8080 ducks-etl ```
+3. Run the container:
+```
+docker run -p 8080:8080 ducks-etl
+```
 
-3. Trigger the process:
-    ``` curl localhost:8080 ```
+5. Trigger the process:
+```
+curl localhost:8080
+```
 
 ## Scheduled Execution
 1. The job is configured to run automatically via Cloud Scheduler.
@@ -66,7 +88,9 @@ To test the ETL logic locally without deploying to Cloud Run:
 ```
 
 2. Manual Trigger. To manually invoke the production pipeline with authentication:
-``` gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1 ```
+```
+gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1
+```
 
 
 
