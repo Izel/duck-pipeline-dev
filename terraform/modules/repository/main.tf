@@ -44,6 +44,6 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   }
 
   # Ensure the service account has permission to run builds
-  service_account = "projects/${var.project_id}/serviceAccounts/duck-pipeline-runner-dev@ducks-pipeline-dev-03032026.iam.gserviceaccount.com" #"projects/${var.project_id}/serviceAccounts/${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+  service_account = "projects/${var.project_id}/serviceAccounts/${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 

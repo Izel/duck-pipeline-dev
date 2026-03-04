@@ -1,3 +1,5 @@
+# This Terraform module defines a Cloud Scheduler job that triggers the data pipeline
+
 resource "google_cloud_scheduler_job" "daily_etl_run" {
   name             = var.job_name
   description      = var.job_description

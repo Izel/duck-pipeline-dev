@@ -1,23 +1,29 @@
 # About duck-pipeline-dev
+
 This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks data project. It is deployed as a **Cloud Run Service** and triggered via **Cloud Scheduler**.
 
 ## Architecture
-- **Service:** Google Cloud Run (HTTP-based)
-- **Trigger:** Cloud Scheduler (Cron)
-- **Region:** `us-central1`
-- **Networking:** Public Ingress (IAM-authenticated)
+
+* **Service:** Google Cloud Run (HTTP-based)
+* **Trigger:** Cloud Scheduler (Cron)
+* **Region:** `us-central1`
+* **Networking:** Public Ingress (IAM-authenticated)
 
 ### Prerequisites
-- Terraform >= 1.0.0
-- Google Cloud SDK (gcloud)
+
+* Terraform >= 1.0.0
+* Google Cloud SDK (gcloud)
   
+
 ### Project setup
-- Permissions (for your personal account  or SA): `roles/run.admin`, `roles/cloudscheduler.admin`, `roles/iam.serviceAccountUser`
-- Via web console, create a new Project and attach it to a Billing Account.
-- Create a Bucket to be used as a *backed bucket* to store the Terraform status files.
-- Replace this bucket name in the file */terraform/envs/dev/backend.tf*
+
+* Permissions (for your personal account  or SA): `roles/run.admin`,    `roles/cloudscheduler.admin`,    `roles/iam.serviceAccountUser`
+* Via web console, create a new Project and attach it to a Billing Account.
+* Create a Bucket to be used as a *backed bucket* to store the Terraform status files.
+* Replace this bucket name in the file */terraform/envs/dev/backend.tf*
 
 ### Connect Repository
+
 1. Go to the *Cloud Build Triggers* page.
 2. Click *Manage Repositories* -> *Connect Repository*.
 3. Select *GitHub (Cloud Build GitHub App)*.
@@ -26,47 +32,93 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 ### Google Cloud connection
 
 1. Choose the account you want to use for this configuration.
-```gcloud init```
+```gcloud init
+
+```
 2. Pick the cloud project to use
 3. Log in to the cloud by following the link provided after executing the command below
 ``` gcloud auth login ```
+
 4. Select your Google account 
 5. Allow Google Cloud to access your account by clicking *Allow*
 
 ## Configure Docker
-```gcloud auth configure-docker us-central1-docker.pkg.dev```
+
+```gcloud auth configure-docker us-central1-docker.pkg.dev
+
+```
   
+
 ## Deployment
-### Steps
+
+The deployment process involves the steps below:
+
+> [!NOTE]
+> A circular reference will be created between Cloud Run Service and Artefact Registry. The first, require an image that has not been created yet, and the second requires a Service to crete an image. To avoid this circular reference, execute step 0. **Set Up** only the first time or after executing *terraform destroy*
+
+0. **Set Up**
+   Uncomment lines below in the *terraform/modules/services/main.tf* file. This will create the service using a basic, ready to use google image.
+```
+
+image = "us-docker.pkg.dev/cloudrun/container/hello"
+
+# image = var.image_path
+
+```
 1. **Initialize Terraform:**
-   ``` terraform init ```
+```
+
+terraform init
+
+```
 
 2. **Plan the infrastructure**
-   ``` terraform plan -out=tfplan ```
+```
+
+terraform plan -out=tfplan
+
+```
 
 3. **Apply changes**
-   ``` apply -var="project_id=<YOUR_PROJECT_ID>" ```
+```
+
+apply -var="project_id=<YOUR_PROJECT_ID>"
+
+```
 
 ## Local Reproduction
+
 To test the ETL logic locally without deploying to Cloud Run:
 1. Build the Docker image:
-    ``` docker build -t ducks-etl .```
+```
+
+docker build -t ducks-etl .
+
+```
 
 2. Run the container:
-    ``` docker run -p 8080:8080 ducks-etl ```
+```
+
+docker run -p 8080:8080 ducks-etl
+
+```
 
 3. Trigger the process:
-    ``` curl localhost:8080 ```
+```
+
+curl localhost:8080
+
+```
 
 ## Scheduled Execution
+
 1. The job is configured to run automatically via Cloud Scheduler.
-```
- Job Name: daily-ducks-etl-job-dev
+```  Job Name: daily-ducks-etl-job-dev
  Target URI: https://duck-pipeline-service-dev-248136157540.us-central1.run.app
 ```
 
 2. Manual Trigger. To manually invoke the production pipeline with authentication:
-``` gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1 ```
 
-
-
+```
+gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1
+```

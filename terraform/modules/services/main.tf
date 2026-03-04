@@ -1,3 +1,8 @@
+# This Terraform module defines a Cloud Run service that will be used to run 
+# the data pipeline. The service is configured to use a specific container image 
+# and environment variables for database connectivity. It also connects to a VPC 
+# network using a specified connector.
+
 resource "google_cloud_run_v2_service" "pipeline_service" {
   name     = var.pipeline_service_name
   location = var.region

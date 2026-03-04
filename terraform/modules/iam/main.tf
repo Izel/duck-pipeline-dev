@@ -1,3 +1,8 @@
+# This Terraform module sets up IAM resources for the data pipeline, including 
+# service accounts and IAM roles necessary for the pipeline to function 
+# properly. It ensures that the pipeline has the required permissions to access 
+# Cloud SQL, Cloud Run, Artifact Registry, and other necessary services.
+
 data "google_project" "project" {}
 
 # Service Account for the Pipeline

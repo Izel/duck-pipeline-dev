@@ -1,3 +1,7 @@
+# This Terraform module sets up the networking infrastructure for the data 
+#pipeline, including a VPC network, a subnet, and a VPC Access Connector for 
+# private connectivity to Cloud Run services.
+
 resource "google_compute_network" "vpc" {
   name                    = var.vpc_name
   auto_create_subnetworks = false

@@ -2,7 +2,6 @@
 variable "project_id" {
   description = "The GCP Project ID for Development environment"
   type        = string
-  default     = "duck-pipeline-2026"
 }
 variable "region" {
   description = "Primary region for project resources provisioning"
@@ -23,6 +22,7 @@ variable "env_name" {
 variable "pipeline_service_name" {
   description = "The name of the Ducks Pipeline Service"
   type        = string
+  default     = "duck-pipeline-service"
 }
 
 # Database configuration Variables
@@ -34,67 +34,81 @@ variable "db_instance_tier" {
 variable "db_instance_name" {
   description = "The name of the database server instance"
   type        = string
+  default     = "duck-db-instance-01"
 }
 variable "db_name" {
   description = "The name of the initial database"
   type        = string
+  default     = "duck_db"
 }
 variable "db_user" {
   description = "The user for the initial database"
   type        = string
+  default     = "duck_user"
 }
 variable "db_password" {
   description = "The password for the initial database user"
   type        = string
   sensitive   = true
+  default     = "duck_db" # consider using a more secure method for production like Secret Manager or passing via CLI
 }
 
 # VPC configuration variable
 variable "vpc_name" {
   description = "The name of the VPC network"
   type        = string
+  default     = "duck-vpc"
 }
 
 # Service Account for IAM resources
 variable "account_id" {
   description = "The service account ID for IAM resources"
   type        = string
+  default     = "duck-pipeline-runner"
 }
 
 # Repository (Artifact Registry) configuration variables
 variable "artifact_repo_name" {
   type        = string
   description = "The name of the artifact at the artifact registry repository."
+  default     = "duck-pipeline-artifacts"
 }
 variable "artifact_repo_format" {
   type        = string
   description = "The format of the artifact registry repository (e.g., DOCKER, MAVEN, etc.)."
+  default     = "DOCKER"
 }
 variable "artifact_repo_description" {
   type        = string
   description = "The description of the artifact registry repository."
+  default     = "Docker repository for the duck-pipeline images"
 }
 variable "artifact_name" {
   type        = string
   description = "The name of the artifact within the artifact registry repository."
+  default     = "duck-pipeline-image"
 }
 variable "artifact_commit_sha" {
   type        = string
   description = "The commit SHA of the artifact within the artifact registry repository."
+  default     = "latest"
 }
 
 # Github trigger configuration variables
 variable "trigger_name" {
   type        = string
   description = "The name of the Cloud Build trigger."
+  default     = "duck-pipeline-trigger"
 }
 variable "github_user" {
   description = "Github user name"
   type        = string
+  default     = "Izel"
 }
 variable "github_repo" {
   description = "Github repository name"
   type        = string
+  default     = "duck-pipeline-dev"
 }
 
 # Variables for Cloud Scheduler job
@@ -121,5 +135,5 @@ variable "job_time_zone" {
 variable "job_attempt_deadline" {
   description = "The attempt deadline for the Cloud Scheduler job"
   type        = string
-  default     = "320s"
+  default     = "180s"
 }

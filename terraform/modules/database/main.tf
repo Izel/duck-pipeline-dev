@@ -1,3 +1,7 @@
+# This Terraform module sets up the Cloud SQL database instance for the data 
+# pipeline, including the database, user, and private connectivity to the VPC 
+# network. It ensures that
+
 # Private IP range for Cloud SQL
 resource "google_compute_global_address" "private_ip_address" {
   name          = "google-managed-services-${var.env_name}"
@@ -12,7 +16,7 @@ resource "google_service_networking_connection" "private_vpc_connection" {
   network                 = var.network_id
   service                 = "servicenetworking.googleapis.com"
   reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
-  deletion_policy         = "ABANDON"
+  deletion_policy         = ""
 }
 
 # Postgres Instance server setup
@@ -28,7 +32,6 @@ resource "google_sql_database_instance" "instance" {
     }
   }
   deletion_protection = false
-  depends_on          = [google_service_networking_connection.private_vpc_connection]
 }
 
 # Database setup

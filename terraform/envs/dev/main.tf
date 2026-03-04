@@ -30,7 +30,7 @@ module "database" {
   db_name                 = "${var.db_name}-${var.env_name}"
   db_user                 = "${var.db_user}-${var.env_name}"
   db_password             = var.db_password
-  depends_on              = [module.api, module.networking]
+  depends_on              = [module.api, module.networking, google_service_networking_connection.private_vpc_connection]
 }
 
 module "iam" {
