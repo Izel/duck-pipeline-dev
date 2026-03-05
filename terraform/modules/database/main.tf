@@ -32,6 +32,7 @@ resource "google_sql_database_instance" "instance" {
     }
   }
   deletion_protection = false
+  depends_on          = [google_service_networking_connection.private_vpc_connection]
 }
 
 # Database setup
