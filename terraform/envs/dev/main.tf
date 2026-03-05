@@ -43,51 +43,53 @@ module "iam" {
   depends_on            = [module.api]
 }
 
-module "repository" {
-  source                    = "../../modules/repository"
-  region                    = var.region
-  env_name                  = var.env_name
-  project_id                = var.project_id
-  artifact_repo_format      = var.artifact_repo_format
-  artifact_repo_name        = "${var.artifact_repo_name}-${var.env_name}"
-  artifact_repo_description = var.artifact_repo_description
-  artifact_name             = var.artifact_name
-  artifact_commit_sha       = var.artifact_commit_sha
-  trigger_name              = "${var.trigger_name}-${var.env_name}"
-  github_user               = var.github_user
-  github_repo               = var.github_repo
-  pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"
-  cloudbuild_sa_email       = module.iam.cloudbuild_sa_email
-  depends_on                = [module.api]
-}
+# module "repository" {
+#   source                    = "../../modules/repository"
+#   region                    = var.region
+#   env_name                  = var.env_name
+#   project_id                = var.project_id
+#   artifact_repo_format      = var.artifact_repo_format
+#   artifact_repo_name        = "${var.artifact_repo_name}-${var.env_name}"
+#   artifact_repo_description = var.artifact_repo_description
+#   artifact_name             = var.artifact_name
+#   artifact_commit_sha       = var.artifact_commit_sha
+#   trigger_name              = "${var.trigger_name}-${var.env_name}"
+#   github_user               = var.github_user
+#   github_repo               = var.github_repo
+#   pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"
+#   cloudbuild_sa_email       = module.iam.cloudbuild_sa_email
+#   depends_on                = [module.api]
+# }
 
 module "services" {
-  source                      = "../../modules/services"
-  project_id                  = var.project_id
-  region                      = var.region
-  pipeline_service_name       = "${var.pipeline_service_name}-${var.env_name}"
-  image_path                  = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
+  source                = "../../modules/services"
+  project_id            = var.project_id
+  region                = var.region
+  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
+  # image_path                  = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
+  image_path                  = "${var.artifact_name}:${var.artifact_commit_sha}"
   pipeline_sa_email           = module.iam.pipeline_sa_email
   db_user                     = "${var.db_user}-${var.env_name}"
   db_password                 = var.db_password
   db_name                     = "${var.db_name}-${var.env_name}"
   db_instance_connection_name = module.database.instance_connection_name
   connector_id                = module.networking.connector_id
-  depends_on                  = [module.networking, module.iam, module.repository, module.database]
+  depends_on                  = [module.networking, module.iam, module.database]
+  # depends_on                  = [module.networking, module.iam, module.repository, module.database]
 }
 
-module "job" {
-  source                = "../../modules/job"
-  project_id            = var.project_id
-  region                = var.region
-  env_name              = var.env_name
-  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
-  job_sa_email          = module.iam.scheduler_sa_email
-  job_name              = "${var.job_name}-${var.env_name}"
-  job_description       = var.job_description
-  job_schedule          = var.job_schedule
-  job_time_zone         = var.job_time_zone
-  job_attempt_deadline  = var.job_attempt_deadline
-  pipeline_service_uri  = module.services.pipeline_service_uri
-  depends_on            = [module.services, module.iam]
-}
+# module "job" {
+#   source                = "../../modules/job"
+#   project_id            = var.project_id
+#   region                = var.region
+#   env_name              = var.env_name
+#   pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
+#   job_sa_email          = module.iam.scheduler_sa_email
+#   job_name              = "${var.job_name}-${var.env_name}"
+#   job_description       = var.job_description
+#   job_schedule          = var.job_schedule
+#   job_time_zone         = var.job_time_zone
+#   job_attempt_deadline  = var.job_attempt_deadline
+#   pipeline_service_uri  = module.services.pipeline_service_uri
+#   depends_on            = [module.services, module.iam]
+# }
