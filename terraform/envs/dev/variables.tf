@@ -1,3 +1,15 @@
+# This Terraform configuration file defines the variables for the development 
+# environment of the duck-pipeline project. It includes variables for project 
+# configuration, database settings, VPC networking, service accounts, 
+# artifact registry, GitHub triggers, and Cloud Scheduler job settings. 
+
+#  The variables are defined with default values and descriptions to facilitate
+#  easy configuration and understanding of their purpose. 
+
+#  NOTE: Variables commented with -<env> will concatenate the environment name in 
+#  their value in the root main.tf to allow for easier differentiation between 
+#  environments (dev, tst, pre, prd) and to prevent resource naming conflicts.
+
 # Variables for Development Environment
 variable "project_id" {
   description = "The GCP Project ID for Development environment"
@@ -18,11 +30,11 @@ variable "env_name" {
   }
 }
 
-# Container and service configuration variables
+# Container and service configuration variables. 
 variable "pipeline_service_name" {
   description = "The name of the Ducks Pipeline Service"
   type        = string
-  default     = "duck-pipeline-service"
+  default     = "duck-pipeline-service" # Will concatenate -<env> name in the root main.tf
 }
 
 # Database configuration Variables
@@ -34,17 +46,17 @@ variable "db_instance_tier" {
 variable "db_instance_name" {
   description = "The name of the database server instance"
   type        = string
-  default     = "duck-db-instance-01"
+  default     = "duck-db-instance-01" # Will concatenate -<env> name in the root main.tf
 }
 variable "db_name" {
   description = "The name of the initial database"
   type        = string
-  default     = "duck_db"
+  default     = "duck_db" # Will concatenate -<env> name in the root main.tf
 }
 variable "db_user" {
   description = "The user for the initial database"
   type        = string
-  default     = "duck_user"
+  default     = "duck_user" # Will concatenate -<env> name in the root main.tf
 }
 variable "db_password" {
   description = "The password for the initial database user"
@@ -57,21 +69,21 @@ variable "db_password" {
 variable "vpc_name" {
   description = "The name of the VPC network"
   type        = string
-  default     = "duck-vpc"
+  default     = "duck-vpc" # Will concatenate -<env> name in the root main.tf
 }
 
 # Service Account for IAM resources
 variable "account_id" {
   description = "The service account ID for IAM resources"
   type        = string
-  default     = "duck-pipeline-runner"
+  default     = "duck-pipeline-runner" # Will concatenate -<env> name in the root main.tf
 }
 
 # Repository (Artifact Registry) configuration variables
 variable "artifact_repo_name" {
   type        = string
   description = "The name of the artifact at the artifact registry repository."
-  default     = "duck-pipeline-artifacts"
+  default     = "duck-pipeline-artifacts" # Will concatenate -<env> name in the root main.tf
 }
 variable "artifact_repo_format" {
   type        = string
@@ -115,7 +127,7 @@ variable "github_repo" {
 variable "job_name" {
   description = "The name of the Cloud Scheduler job"
   type        = string
-  default     = "daily-ducks-etl-job"
+  default     = "daily-ducks-etl-job" # Will concatenate -<env> name in the root main.tf
 }
 variable "job_description" {
   description = "The description of the Cloud Scheduler job"
