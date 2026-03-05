@@ -32,7 +32,8 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   filename = "cloudbuild.yaml"
 
   # We are using the default Compute SA for now since it usually has the most permissions
-  service_account = "projects/${var.project_id}/serviceAccounts/1078073278601-compute@developer.gserviceaccount.com"
+  #service_account = "projects/${var.project_id}/serviceAccounts/1078073278601-compute@developer.gserviceaccount.com"
+  service_account = "projects/duck-pipeline-202603/serviceAccounts/duck-builder-sa-dev@duck-pipeline-202603.iam.gserviceaccount.com"
 }
 
 
