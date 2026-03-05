@@ -23,7 +23,7 @@ steps:
         "deploy",
         "${_SERVICE_NAME}",
         "--image",
-        "${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/${_IMAGE_NAME}:${_COMMIT_SHA}",
+        "${_IMAGE_NAME}:${_COMMIT_SHA}",
         "--region",
         "${_REGION}",
         "--platform",
@@ -36,7 +36,7 @@ substitutions:
   _REPO_NAME: "duck-pipeline-artifacts-dev"
   _SERVICE_NAME: "duck-pipeline-service-dev"
   _COMMIT_SHA: "latest" # This will be automatically replaced with the actual commit SHA by Cloud Build
-  _IMAGE_NAME: "duck-pipeline-image"
+  _IMAGE_NAME: "us-docker.pkg.dev/cloudrun/container/hello" #"duck-pipeline-image"
 
 # This block tells Cloud Build to push these tags automatically after the steps finish
 images:
