@@ -56,7 +56,6 @@ resource "google_project_iam_member" "cloudbuild_sa_roles" {
   project = var.project_id
   role    = each.key
   member  = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
-  #member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Service Account for Cloud Scheduler

@@ -21,7 +21,7 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 
 ### Project setup
 
-* Permissions (for your personal account  or SA): `roles/run.admin`,         `roles/cloudscheduler.admin`,         `roles/iam.serviceAccountUser`
+* Permissions (for your personal account  or SA): `roles/run.admin`,          `roles/cloudscheduler.admin`,          `roles/iam.serviceAccountUser`
 * Via web console, create a new Project and attach it to a Billing Account.
 * Create a Bucket to be used as a *backed bucket* to store the Terraform status files.
 * Replace this bucket name in the file */terraform/envs/dev/backend.tf*
@@ -36,12 +36,19 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 ### Google Cloud connection
 
 1. Choose the account you want to use for this configuration.
-```gcloud init
 
 ```
+gcloud init
+
+```
+
 2. Pick the cloud project to use
 3. Log in to the cloud by following the link provided after executing the command below
-``` gcloud auth login ```
+
+```
+
+gcloud auth login 
+```
 
 4. Select your Google account 
 5. Allow Google Cloud to access your account by clicking *Allow*
@@ -52,8 +59,6 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 gcloud auth configure-docker us-central1-docker.pkg.dev
 
 ```
-
-  
 
 ## Deployment
 
