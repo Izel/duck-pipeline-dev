@@ -26,7 +26,7 @@ resource "google_cloudbuild_trigger" "github_trigger" {
     owner = var.github_user
     name  = var.github_repo
     push {
-      branch = "master" # Trigger only on pushes to the master branch
+      branch = "^master$" # Trigger only on pushes to the master branch
     }
   }
   # Build configuration
