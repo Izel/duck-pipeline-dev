@@ -19,7 +19,7 @@ data "google_project" "project" {}
 
 resource "google_cloudbuild_trigger" "github_trigger" {
   name        = var.trigger_name
-  location    = "global"
+  location    = var.region
   description = "Trigger for pushing to master branch"
 
   github {
