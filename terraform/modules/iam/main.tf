@@ -37,6 +37,7 @@ resource "google_project_iam_member" "cloudbuild_service_agent_user" {
     "roles/secretmanager.secretAccessor",
     "roles/cloudbuild.serviceAgent",
     "roles/cloudbuild.builds.builder",
+    "roles/cloudbuild.connectionAdmin"
   ])
   project = var.project_id
   role    = each.key
