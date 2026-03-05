@@ -15,7 +15,8 @@ variable "gcp_service_list" {
     "artifactregistry.googleapis.com",  # For container image storage
     "iam.googleapis.com",               # Permissions and Service Accounts
     "cloudbuild.googleapis.com",        # For building container images
-    "cloudscheduler.googleapis.com"     # For scheduling jobs
+    "cloudscheduler.googleapis.com",    # For scheduling jobs
+    "cloudresourcemanager.googleapis.com"
   ]
 }
 

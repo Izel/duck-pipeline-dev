@@ -16,33 +16,25 @@ resource "google_artifact_registry_repository" "pipeline_artifact_repo" {
 }
 
 data "google_project" "project" {}
-
 resource "google_cloudbuild_trigger" "github_trigger" {
-  name        = var.trigger_name
-  location    = var.region
-  description = "Trigger for pushing to master branch"
+  project  = "duck-pipeline-202603"
+  name     = "duck-pipeline-trigger-dev"
+  location = "us-central1"
 
   github {
-    owner = var.github_user
-    name  = var.github_repo
+    owner = "Izel"              # Use your actual GitHub username
+    name  = "duck-pipeline-dev" # Use your actual repo name
     push {
-      branch = "^master$" # Trigger only on pushes to the master branch
+      branch = "^master$"
     }
   }
-  # Build configuration
+
   filename = "cloudbuild.yaml"
 
-  # Pass the variables needed by the YAML
-  substitutions = {
-    _PROJECT_ID   = var.project_id
-    _REGION       = var.region
-    _REPO_NAME    = var.artifact_repo_name
-    _SERVICE_NAME = var.pipeline_service_name
-    _IMAGE_NAME   = var.artifact_name
-    _COMMIT_SHA   = var.artifact_commit_sha
-  }
-
-  # Ensure the service account has permission to run builds
-  service_account = "projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
+  # We are using the default Compute SA for now since it usually has the most permissions
+  service_account = "projects/${var.project_id}/serviceAccounts/1078073278601-compute@developer.gserviceaccount.com"
 }
+
+
+
 
