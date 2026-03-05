@@ -43,23 +43,23 @@ module "iam" {
   depends_on            = [module.api]
 }
 
-# module "repository" {
-#   source                    = "../../modules/repository"
-#   region                    = var.region
-#   env_name                  = var.env_name
-#   project_id                = var.project_id
-#   artifact_repo_format      = var.artifact_repo_format
-#   artifact_repo_name        = "${var.artifact_repo_name}-${var.env_name}"
-#   artifact_repo_description = var.artifact_repo_description
-#   artifact_name             = var.artifact_name
-#   artifact_commit_sha       = var.artifact_commit_sha
-#   trigger_name              = "${var.trigger_name}-${var.env_name}"
-#   github_user               = var.github_user
-#   github_repo               = var.github_repo
-#   pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"
-#   cloudbuild_sa_email       = module.iam.cloudbuild_sa_email
-#   depends_on                = [module.api]
-# }
+module "repository" {
+  source                    = "../../modules/repository"
+  region                    = var.region
+  env_name                  = var.env_name
+  project_id                = var.project_id
+  artifact_repo_format      = var.artifact_repo_format
+  artifact_repo_name        = "${var.artifact_repo_name}-${var.env_name}"
+  artifact_repo_description = var.artifact_repo_description
+  artifact_name             = var.artifact_name
+  artifact_commit_sha       = var.artifact_commit_sha
+  trigger_name              = "${var.trigger_name}-${var.env_name}"
+  github_user               = var.github_user
+  github_repo               = var.github_repo
+  pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"
+  cloudbuild_sa_email       = module.iam.cloudbuild_sa_email
+  depends_on                = [module.api]
+}
 
 module "services" {
   source                = "../../modules/services"
@@ -74,8 +74,7 @@ module "services" {
   db_name                     = "${var.db_name}-${var.env_name}"
   db_instance_connection_name = module.database.instance_connection_name
   connector_id                = module.networking.connector_id
-  depends_on                  = [module.networking, module.iam, module.database]
-  # depends_on                  = [module.networking, module.iam, module.repository, module.database]
+  depends_on                  = [module.networking, module.iam, module.repository, module.database]
 }
 
 # module "job" {
