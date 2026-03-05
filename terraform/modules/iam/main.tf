@@ -34,7 +34,9 @@ resource "google_project_iam_member" "sql_client" {
 resource "google_project_iam_member" "cloudbuild_service_agent_user" {
   for_each = toset([
     "roles/iam.serviceAccountUser",
-    "roles/secretmanager.secretAccessor"
+    "roles/secretmanager.secretAccessor",
+    "roles/cloudbuild.serviceAgent",
+    "roles/cloudbuild.builds.builder",
   ])
   project = var.project_id
   role    = each.key
