@@ -29,7 +29,6 @@ resource "google_cloudbuild_trigger" "github_trigger" {
       branch = "master" # Trigger only on pushes to the master branch
     }
   }
-
   # Build configuration
   filename = "cloudbuild.yaml"
 

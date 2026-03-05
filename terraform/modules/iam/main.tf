@@ -29,15 +29,24 @@ resource "google_project_iam_member" "sql_client" {
   member  = "serviceAccount:${google_service_account.pipeline_sa.email}"
 }
 
+
+# Grant the Cloud Build Service Agent the power to "impersonate" the Cloud Run SA
+resource "google_project_iam_member" "cloudbuild_service_agent_user" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+}
+
 # Allow Cloud Build to act as the pipeline service account
-resource "google_project_iam_member" "pipeline_sa_roles" {
+resource "google_project_iam_member" "cloudbuild_sa_roles" {
   for_each = toset([
     "roles/run.admin",
     "roles/iam.serviceAccountUser",
     "roles/artifactregistry.writer",
     "roles/artifactregistry.reader",
     "roles/artifactregistry.repoAdmin",
-    "roles/logging.logWriter"
+    "roles/logging.logWriter",
+    "roles/cloudbuild.builds.builder"
   ])
   project = var.project_id
   role    = each.key
