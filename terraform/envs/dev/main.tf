@@ -54,7 +54,6 @@ module "repository" {
   artifact_name             = var.artifact_name
   artifact_commit_sha       = var.artifact_commit_sha
   trigger_name              = "${var.trigger_name}-${var.env_name}"
-  service_account           = module.iam.pipeline_sa_email
   github_user               = var.github_user
   github_repo               = var.github_repo
   pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"

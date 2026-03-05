@@ -37,6 +37,11 @@ resource "google_project_iam_member" "cloudbuild_service_agent_user" {
   member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
 }
 
+resource "google_service_account" "cloudbuild_sa" {
+  account_id   = "duck-builder-sa-${var.env_name}"
+  display_name = "Custom Cloud Build Service Account"
+}
+
 # Allow Cloud Build to act as the pipeline service account
 resource "google_project_iam_member" "cloudbuild_sa_roles" {
   for_each = toset([
@@ -50,7 +55,8 @@ resource "google_project_iam_member" "cloudbuild_sa_roles" {
   ])
   project = var.project_id
   role    = each.key
-  member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
+  member  = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
+  #member  = "serviceAccount:${data.google_project.project.number}@cloudbuild.gserviceaccount.com"
 }
 
 # Service Account for Cloud Scheduler
