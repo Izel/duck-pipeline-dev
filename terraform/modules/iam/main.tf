@@ -37,7 +37,26 @@ resource "google_project_iam_member" "cloudbuild_service_agent_user" {
     "roles/secretmanager.secretAccessor",
     "roles/cloudbuild.serviceAgent",
     "roles/cloudbuild.builds.builder",
-    "roles/cloudbuild.connectionAdmin"
+    "roles/cloudbuild.builds.editor",
+    "roles/cloudbuild.connectionAdmin",
+    "roles/run.admin",
+    "roles/cloudbuild.builds.builder",
+    "roles/logging.logWriter",
+    "roles/run.admin",
+    "roles/iam.serviceAccountUser",
+    "roles/artifactregistry.writer",
+    "roles/artifactregistry.reader",
+    "roles/artifactregistry.repoAdmin",
+    "roles/logging.logWriter",
+    "roles/cloudbuild.builds.builder",
+    "roles/iam.serviceAccountUser",
+    "roles/secretmanager.secretAccessor",
+    "roles/cloudbuild.serviceAgent",
+    "roles/cloudbuild.builds.builder",
+    "roles/cloudbuild.connectionAdmin",
+    "roles/run.admin",
+    "roles/logging.logWriter",
+    "roles/serviceusage.serviceUsageConsumer"
   ])
   project = var.project_id
   role    = each.key
@@ -58,7 +77,16 @@ resource "google_project_iam_member" "cloudbuild_sa_roles" {
     "roles/artifactregistry.reader",
     "roles/artifactregistry.repoAdmin",
     "roles/logging.logWriter",
-    "roles/cloudbuild.builds.builder"
+    "roles/cloudbuild.builds.builder",
+    "roles/iam.serviceAccountUser",
+    "roles/secretmanager.secretAccessor",
+    "roles/cloudbuild.serviceAgent",
+    "roles/cloudbuild.builds.builder",
+    "roles/cloudbuild.connectionAdmin",
+    "roles/run.admin",
+    "roles/logging.logWriter",
+    "roles/cloudbuild.builds.editor",
+    "roles/serviceusage.serviceUsageConsumer"
   ])
   project = var.project_id
   role    = each.key
