@@ -32,8 +32,12 @@ resource "google_project_iam_member" "sql_client" {
 
 # Grant the Cloud Build Service Agent the power to "impersonate" the Cloud Run SA
 resource "google_project_iam_member" "cloudbuild_service_agent_user" {
+  for_each = toset([
+    "roles/iam.serviceAccountUser",
+    "roles/secretmanager.secretAccessor"
+  ])
   project = var.project_id
-  role    = "roles/iam.serviceAccountUser"
+  role    = each.key
   member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
 }
 
