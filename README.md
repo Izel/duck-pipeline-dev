@@ -21,7 +21,7 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 
 ### Project setup
 
-* Permissions (for your personal account  or SA): `roles/run.admin`,        `roles/cloudscheduler.admin`,        `roles/iam.serviceAccountUser`
+* Permissions (for your personal account  or SA): `roles/run.admin`,         `roles/cloudscheduler.admin`,         `roles/iam.serviceAccountUser`
 * Via web console, create a new Project and attach it to a Billing Account.
 * Create a Bucket to be used as a *backed bucket* to store the Terraform status files.
 * Replace this bucket name in the file */terraform/envs/dev/backend.tf*
