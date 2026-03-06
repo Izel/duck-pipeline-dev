@@ -22,8 +22,8 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   location = var.region
 
   github {
-    owner = "Izel"              # Use your actual GitHub username
-    name  = "duck-pipeline-dev" # Use your actual repo name
+    owner = var.github_user # Use your actual GitHub username
+    name  = var.github_repo # Use your actual repo name
     push {
       branch = "^master$"
     }
