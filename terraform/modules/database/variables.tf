@@ -17,9 +17,9 @@ variable "env_name" {
   }
 }
 
-variable "network_id" {
+variable "vpc_name" {
   type        = string
-  description = "The network ID for the project"
+  description = "The name of the VPC network"
 }
 
 variable "db_instance_tier" {

@@ -22,3 +22,25 @@ resource "google_vpc_access_connector" "connector" {
   network       = google_compute_network.vpc.name
 }
 
+# Private IP range for Cloud SQL
+resource "google_compute_global_address" "private_ip_address" {
+  name          = "google-managed-services-${var.env_name}"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.vpc.id # Use the ID, to ensure the VPC exists first
+  # network       = var.network_id
+  # network       = var.vpc_name
+}
+
+# Private connection
+resource "google_service_networking_connection" "private_vpc_connection" {
+  network                 = google_compute_network.vpc.id # Use the ID, to ensure the VPC exists first
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_address.name]
+  deletion_policy         = null
+  depends_on = [
+    google_compute_network.vpc,
+    google_compute_global_address.private_ip_address
+  ]
+}

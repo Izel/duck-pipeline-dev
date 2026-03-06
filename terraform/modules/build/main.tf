@@ -17,9 +17,9 @@ resource "google_artifact_registry_repository" "pipeline_artifact_repo" {
 
 data "google_project" "project" {}
 resource "google_cloudbuild_trigger" "github_trigger" {
-  project  = "duck-pipeline-202603"
-  name     = "duck-pipeline-trigger-dev"
-  location = "us-central1"
+  project  = var.project_id
+  name     = var.trigger_name
+  location = var.region
 
   github {
     owner = "Izel"              # Use your actual GitHub username
@@ -32,8 +32,8 @@ resource "google_cloudbuild_trigger" "github_trigger" {
   filename = "cloudbuild.yaml"
 
   # We are using the default Compute SA for now since it usually has the most permissions
-  #service_account = "projects/${var.project_id}/serviceAccounts/1078073278601-compute@developer.gserviceaccount.com"
-  service_account = "projects/duck-pipeline-202603/serviceAccounts/duck-builder-sa-dev@duck-pipeline-202603.iam.gserviceaccount.com"
+  service_account = "projects/${var.project_id}/serviceAccounts/duck-builder-sa-dev@${var.project_id}.iam.gserviceaccount.com"
+  #service_account = "projects/duck-pipeline-202603/serviceAccounts/duck-builder-sa-dev@duck-pipeline-202603.iam.gserviceaccount.com"
 }
 
 

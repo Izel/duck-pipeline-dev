@@ -1,0 +1,5 @@
+terraform state rm module.networking.google_service_networking_connection.private_vpc_connection   
+terraform state rm module.networking.google_service_networking_connection.private_ip_address
+terraform state rm module.networking.google_service_networking_connection.connector
+terraform state rm module.networking.google_service_networking_connection.subnet
+terraform state rm module.networking.google_service_networking_connection.vpc

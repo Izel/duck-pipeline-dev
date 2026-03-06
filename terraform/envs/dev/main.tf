@@ -1,8 +1,3 @@
-provider "google" {
-  project = var.project_id
-  region  = var.region
-}
-
 data "google_project" "current" {
   project_id = var.project_id
 }
@@ -10,27 +5,10 @@ data "google_project" "current" {
 module "api" {
   source     = "../../modules/api"
   project_id = var.project_id
-}
-
-module "networking" {
-  source     = "../../modules/networking"
-  vpc_name   = "${var.vpc_name}-${var.env_name}"
-  region     = var.region
-  depends_on = [module.api]
-}
-
-module "database" {
-  source                  = "../../modules/database"
-  project_id              = var.project_id
-  region                  = var.region
-  env_name                = var.env_name
-  network_id              = module.networking.network_id
-  db_instance_tier        = var.db_instance_tier
-  db_server_instance_name = "${var.db_instance_name}-${var.env_name}"
-  db_name                 = "${var.db_name}-${var.env_name}"
-  db_user                 = "${var.db_user}-${var.env_name}"
-  db_password             = var.db_password
-  depends_on              = [module.api, module.networking]
+  providers = {
+    google      = google
+    google-beta = google-beta
+  }
 }
 
 module "iam" {
@@ -40,11 +18,33 @@ module "iam" {
   pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
   region                = var.region
   env_name              = var.env_name
-  depends_on            = [module.api]
+  depends_on            = [module.api, module.api.apis_ready] # WAIT FOR ROBOTS TO BE BORN
 }
 
-module "repository" {
-  source                    = "../../modules/repository"
+module "networking" {
+  source     = "../../modules/networking"
+  vpc_name   = "${var.vpc_name}-${var.env_name}"
+  region     = var.region
+  env_name   = var.env_name
+  depends_on = [module.iam] # WAIT FOR PERMISSIONS
+}
+
+module "database" {
+  source                  = "../../modules/database"
+  project_id              = var.project_id
+  region                  = var.region
+  env_name                = var.env_name
+  vpc_name                = module.networking.vpc_id
+  db_instance_tier        = var.db_instance_tier
+  db_server_instance_name = "${var.db_instance_name}-${var.env_name}"
+  db_name                 = "${var.db_name}-${var.env_name}"
+  db_user                 = "${var.db_user}-${var.env_name}"
+  db_password             = var.db_password
+  depends_on              = [module.networking]
+}
+
+module "build" {
+  source                    = "../../modules/build"
   region                    = var.region
   env_name                  = var.env_name
   project_id                = var.project_id
@@ -56,7 +56,7 @@ module "repository" {
   github_repo               = var.github_repo
   pipeline_service_name     = "${var.pipeline_service_name}-${var.env_name}"
   cloudbuild_sa_email       = module.iam.cloudbuild_sa_email
-  depends_on                = [module.api]
+  depends_on                = [module.api, module.iam] # WAIT FOR PERMISSIONS AND APIS
 }
 
 module "services" {
@@ -72,8 +72,10 @@ module "services" {
   db_name                     = "${var.db_name}-${var.env_name}"
   db_instance_connection_name = module.database.instance_connection_name
   connector_id                = module.networking.connector_id
-  depends_on                  = [module.networking, module.iam, module.repository, module.database]
+  depends_on                  = [module.iam, module.networking, module.database, module.build]
 }
+
+
 
 # module "job" {
 #   source                = "../../modules/job"
