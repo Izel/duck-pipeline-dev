@@ -64,8 +64,8 @@ module "services" {
   project_id            = var.project_id
   region                = var.region
   pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
-  # image_path                  = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
-  image_path                  = "${var.artifact_name}:${var.artifact_commit_sha}"
+  image_path            = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
+  #image_path                  = "${var.artifact_name}:${var.artifact_commit_sha}"
   pipeline_sa_email           = module.iam.pipeline_sa_email
   db_user                     = "${var.db_user}-${var.env_name}"
   db_password                 = var.db_password
@@ -75,20 +75,18 @@ module "services" {
   depends_on                  = [module.iam, module.networking, module.database, module.build]
 }
 
-
-
-# module "job" {
-#   source                = "../../modules/job"
-#   project_id            = var.project_id
-#   region                = var.region
-#   env_name              = var.env_name
-#   pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
-#   job_sa_email          = module.iam.scheduler_sa_email
-#   job_name              = "${var.job_name}-${var.env_name}"
-#   job_description       = var.job_description
-#   job_schedule          = var.job_schedule
-#   job_time_zone         = var.job_time_zone
-#   job_attempt_deadline  = var.job_attempt_deadline
-#   pipeline_service_uri  = module.services.pipeline_service_uri
-#   depends_on            = [module.services, module.iam]
-# }
+module "job" {
+  source                = "../../modules/job"
+  project_id            = var.project_id
+  region                = var.region
+  env_name              = var.env_name
+  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
+  job_sa_email          = module.iam.scheduler_sa_email
+  job_name              = "${var.job_name}-${var.env_name}"
+  job_description       = var.job_description
+  job_schedule          = var.job_schedule
+  job_time_zone         = var.job_time_zone
+  job_attempt_deadline  = var.job_attempt_deadline
+  pipeline_service_uri  = module.services.pipeline_service_uri
+  depends_on            = [module.iam, module.services]
+}

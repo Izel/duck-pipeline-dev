@@ -31,10 +31,16 @@ resource "google_cloudbuild_trigger" "github_trigger" {
 
   filename = "cloudbuild.yaml"
 
+  substitutions = {
+    _REGION       = var.region
+    _REPO_NAME    = var.artifact_repo_name
+    _SERVICE_NAME = var.pipeline_service_name
+    _COMMIT_SHA   = var.artifact_commit_sha # This will be automatically replaced with the actual commit SHA by Cloud Build
+    _IMAGE_NAME   = var.artifact_name
+  }
+
   # We are using the default Compute SA for now since it usually has the most permissions
-  #service_account = var.cloudbuild_sa_email
   service_account = "projects/${var.project_id}/serviceAccounts/${var.cloudbuild_sa_email}"
-  #service_account = "projects/duck-pipeline-202603/serviceAccounts/duck-builder-sa-dev@duck-pipeline-202603.iam.gserviceaccount.com"
 }
 
 

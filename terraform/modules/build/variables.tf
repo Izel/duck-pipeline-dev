@@ -25,14 +25,14 @@ variable "artifact_repo_description" {
   type        = string
   description = "The description of the artifact registry repository."
 }
-# variable "artifact_name" {
-#   type        = string
-#   description = "The name of the artifact within the artifact registry repository."
-# }
-# variable "artifact_commit_sha" {
-#   type        = string
-#   description = "The commit SHA of the artifact within the artifact registry repository."
-# }
+variable "artifact_name" {
+  type        = string
+  description = "The name of the artifact within the artifact registry repository."
+}
+variable "artifact_commit_sha" {
+  type        = string
+  description = "The commit SHA of the artifact within the artifact registry repository."
+}
 
 
 # Github trigger configuration variables
