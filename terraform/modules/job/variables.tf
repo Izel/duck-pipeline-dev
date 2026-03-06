@@ -42,7 +42,7 @@ variable "job_description" {
 variable "job_schedule" {
   description = "The schedule for the Cloud Scheduler job (cron format)"
   type        = string
-  default     = "0 6 * * *" # Cron job runs at 6:00 AM every day
+  default     = "0 2 * * *" # Cron job runs at 2:00 AM every day
 }
 variable "job_time_zone" {
   description = "The time zone for the Cloud Scheduler job"
