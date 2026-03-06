@@ -48,6 +48,13 @@ resource "google_project_iam_member" "cloudbuild_sa_roles" {
   member  = "serviceAccount:${google_service_account.cloudbuild_sa.email}"
 }
 
+# This gives the Cloud Build Robot the permissions it needs to run
+resource "google_project_iam_member" "cloudbuild_robot_roles" {
+  project = var.project_id
+  role    = "roles/cloudbuild.serviceAgent"
+  member  = "serviceAccount:service-${data.google_project.project.number}@gcp-sa-cloudbuild.iam.gserviceaccount.com"
+}
+
 # Roles for the Pipeline/Run SA
 resource "google_project_iam_member" "pipeline_sa_roles" {
   for_each = toset([
