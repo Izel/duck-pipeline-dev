@@ -51,6 +51,8 @@ module "build" {
   artifact_repo_format      = var.artifact_repo_format
   artifact_repo_name        = "${var.artifact_repo_name}-${var.env_name}"
   artifact_repo_description = var.artifact_repo_description
+  artifact_commit_sha       = var.artifact_commit_sha
+  artifact_name             = var.artifact_name
   trigger_name              = "${var.trigger_name}-${var.env_name}"
   github_user               = var.github_user
   github_repo               = var.github_repo
@@ -60,12 +62,11 @@ module "build" {
 }
 
 module "services" {
-  source                = "../../modules/services"
-  project_id            = var.project_id
-  region                = var.region
-  pipeline_service_name = "${var.pipeline_service_name}-${var.env_name}"
-  image_path            = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
-  #image_path                  = "${var.artifact_name}:${var.artifact_commit_sha}"
+  source                      = "../../modules/services"
+  project_id                  = var.project_id
+  region                      = var.region
+  pipeline_service_name       = "${var.pipeline_service_name}-${var.env_name}"
+  image_path                  = "${var.region}-docker.pkg.dev/${var.project_id}/${var.artifact_repo_name}-${var.env_name}/${var.artifact_name}:${var.artifact_commit_sha}"
   pipeline_sa_email           = module.iam.pipeline_sa_email
   db_user                     = "${var.db_user}-${var.env_name}"
   db_password                 = var.db_password

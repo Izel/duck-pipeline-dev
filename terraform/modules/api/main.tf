@@ -3,19 +3,6 @@
 #
 # Note: compute.googleapis.com is required for the VPC and should not be removed 
 
-# terraform {
-#   required_providers {
-#     google = {
-#       source  = "hashicorp/google"
-#       version = ">= 5.0"
-#     }
-#     google-beta = {
-#       source  = "hashicorp/google-beta"
-#       version = ">= 5.0"
-#     }
-#   }
-# }
-
 variable "gcp_service_list" {
   description = "The list of apis necessary for the project"
   type        = list(string)
@@ -32,14 +19,14 @@ variable "gcp_service_list" {
   ]
 }
 
-# 1. Foundational API (Compute)
+# Foundational API (Compute)
 resource "google_project_service" "compute_api" {
   project            = var.project_id
   service            = "compute.googleapis.com"
   disable_on_destroy = false
 }
 
-# 2. All other APIs (depend on Compute)
+# All other APIs (depend on Compute)
 resource "google_project_service" "ducks_services" {
   for_each           = toset(var.gcp_service_list)
   project            = var.project_id
@@ -48,7 +35,7 @@ resource "google_project_service" "ducks_services" {
   depends_on         = [google_project_service.compute_api]
 }
 
-# 3. Force create the SQL Service Agent (Robot)
+# Force create the SQL Service Agent (Robot)
 resource "google_project_service_identity" "sql_sa" {
   provider   = google-beta
   project    = var.project_id
@@ -56,7 +43,7 @@ resource "google_project_service_identity" "sql_sa" {
   depends_on = [google_project_service.ducks_services]
 }
 
-# 4. Force create the Cloud Build Service Agent (Robot)
+# Force create the Cloud Build Service Agent (Robot)
 resource "google_project_service_identity" "cloudbuild_sa" {
   provider   = google-beta
   project    = var.project_id
@@ -64,7 +51,7 @@ resource "google_project_service_identity" "cloudbuild_sa" {
   depends_on = [google_project_service.ducks_services]
 }
 
-# 5. The "Wait" resource to let GCP backend sync
+# The "Wait" resource to let GCP backend sync
 resource "time_sleep" "wait_for_apis" {
   depends_on = [
     google_project_service.compute_api,

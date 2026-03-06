@@ -7,13 +7,7 @@ resource "google_sql_database_instance" "instance" {
   name             = var.db_server_instance_name
   region           = var.region
   database_version = "POSTGRES_15"
-  # settings {
-  #   tier = var.db_instance_tier
-  #   ip_configuration {
-  #     ipv4_enabled    = false        # Disables Public IP
-  #     private_network = var.vpc_name # Connects to the VPC network for private IP access
-  #   }
-  # }
+
   settings {
     tier = var.db_instance_tier
     ip_configuration {
