@@ -10,7 +10,7 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
 * **Networking:** Public Ingress (IAM-authenticated)
 
 <p align="center">
-  <img src="assets/duck-pipeline-arch.png" width="600"/>
+  <img src="assets/Duck-pipeline-arch.png" width="600"/>
 </p>
 
 ### Prerequisites
