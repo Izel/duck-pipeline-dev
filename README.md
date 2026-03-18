@@ -2,6 +2,7 @@
 
 This project implements a batch ETL (Extract, Transform, Load) pipeline that queries the Ducks Unlimited API's university chapter and extracts the `california` chapters. The solution is containerised using **Docker**, served in **Cloud Run Service** and triggered via **Cloud Scheduler** once a day. This solution implements the end-to-end CI/CD using **Cloud Build**, stores the data in Postgres via **CloudSQL** and manages credentials using **Secrets Manager** and **KMS**.
 
+Production-grade batch ETL platform built entirely on **GCP**, provisioned with **Terraform** as Infrastructure as Code (IaC). Demonstrates enterprise patterns including credential management via **Secrets Manager** and **KMS** for key rotation, end-to-end **CI/CD** with **Cloud Build**, containerised deployment on **Cloud Run**, and scheduled execution via **Cloud Scheduler**. Data is persisted to PostgreSQL via **Cloud SQL**.
 ----
 
 ## Tools
@@ -150,5 +151,4 @@ gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1
 Possible improvements to this project:
 
 * Add monitoring and alerting 
-* Implement Secrets manager and KMS :construction:
 * Add functionality to promote to other environments (TST, PRE, PRD) :construction:
