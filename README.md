@@ -1,8 +1,10 @@
 # About duck-pipeline-dev
 
-This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks data project. It is deployed as a **Cloud Run Service** and triggered via **Cloud Scheduler**.
+This project implements a batch ETL (Extract, Transform, Load) pipeline that queries the Ducks Unlimited API's university chapter and extracts the `california` chapters. The solution is containerised using **Docker**, served in **Cloud Run Service** and triggered via **Cloud Scheduler** once a day. This solution implements the end-to-end CI/CD using **Cloud Build**, stores the data in Postgres via **CloudSQL** and manages credentials using **Secrets Manager** and **KMS**.
 
-# Tools
+----
+
+## Tools
 
 | Tool                 | Usage         |
 | ---------------------| ------------- |
@@ -21,15 +23,18 @@ This project contains the ETL (Extract, Transform, Load) pipeline for the Ducks 
   <img src="assets/Duck-pipeline-arch.png" width="600"/>
 </p>
 
-### Prerequisites
+---
+
+## Prerequisites
 
 * Terraform >= 1.0.0
 * Google Cloud SDK (gcloud)
   
+---
 
-### Project setup
+## Project setup
 
-* Permissions (for your personal account  or SA): `roles/run.admin`, `roles/cloudscheduler.admin`,                 `roles/iam.serviceAccountUser`
+* Permissions (for your personal account  or SA): `roles/run.admin`, `roles/cloudscheduler.admin`,  `roles/iam.serviceAccountUser`
 * Via web console, create a new Project and attach it to a Billing Account.
 * Create a Bucket to be used as a *backed bucket* to store the Terraform status files.
 * Replace this bucket name in the file */terraform/envs/dev/backend.tf*
@@ -60,17 +65,18 @@ gcloud auth login
 4. Select your Google account 
 5. Allow Google Cloud to access your account by clicking *Allow*
 
-## Configure Docker
+### Configure Docker
 
 ```
 gcloud auth configure-docker <Project_region>-docker.pkg.dev
 ```
+---
 
 ## Deployment
 
 The deployment process involves the steps below:
 
-> [! NOTE]
+> [!NOTE]
 > A circular reference will be created between Cloud Run Service and Artefact Registry. The first, require an image that has not been created yet, and the second requires a Service to crete an image. To avoid this circular reference, execute step 0. **Set Up** only the first time or after executing *terraform destroy*
 
 0. **Set Up**
@@ -103,6 +109,7 @@ terraform plan -out=tfplan
 ```
 apply -var="project_id=<YOUR_PROJECT_ID>"
 ```
+---
 
 ## Local Reproduction
 
@@ -122,6 +129,8 @@ docker run -p 8080:8080 ducks-etl
 curl localhost:8080
 ```
 
+---
+
 ## Scheduled Execution
 
 1. The job is configured to run automatically via Cloud Scheduler.
@@ -133,3 +142,13 @@ curl localhost:8080
 ```
 gcloud scheduler jobs run daily-ducks-etl-job-dev --location=us-central1
 ```
+
+---
+
+## Future Improvements
+
+Possible improvements to this project:
+
+* Add monitoring and alerting 
+* Implement Secrets manager and KMS :construction:
+* Add functionality to promote to other environments (TST, PRE, PRD) :construction:
